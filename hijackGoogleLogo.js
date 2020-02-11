@@ -4,6 +4,7 @@ let hijackGoogleLogo = function(){
 let googleLogoEl = document.querySelector("#hplogo");
 
 googleLogoEl.src = "https://www.hackyourfuture.dk/static/logo-dark.svg";
+googleLogoEl.srcset = "https://www.hackyourfuture.dk/static/logo-dark.svg";
 }
 
 function main(){
