@@ -21,7 +21,7 @@ function Weather(){
     position: ""
    });
 
-  const URL = `http://api.openweathermap.org/data/2.5/weather?q=${cityToSearch}&appid=${REACT_APP_OPENWEATHERMAP_API_KEY}`;
+  const URL = `http://api.openweathermap.org/data/2.5/weather?q=${cityToSearch}&appid=${process.env.OPENWEATHERMAP_API_KEY}`;
 
   let cityInfoToShow = "";        // Displays the city General Info
 
