@@ -20,6 +20,26 @@
     border-left-style: none;
     border-color: rgb(109, 107, 107);
   }
+
+  .btn-close {
+    float: right;
+    width: 34px;
+    height: 34px;
+    border-radius : 17px;
+    font-weight: bold;
+    font-size: 18px;
+    border-width: 3px;
+    border-color: black;
+    background-color: white;
+    margin: 0 10px 0 0;
+    padding: 0px;
+    cursor: pointer;
+  }
+
+  .btn-close:active {
+    border-color: rgb(59, 56, 56);
+    color: rgb(59, 56, 56);
+  }
   
   .City-Country {
     padding: 0;
@@ -49,6 +69,14 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+
+  .InitialMsg{
+    padding: 10px;
+    background-color: rgb(64, 75, 231);
+    border-radius: 8px;
+    color: rgb(236, 227, 227);
+    font-size: 20px;
   }
 
   .ListContainer {
@@ -108,3 +136,4 @@
     color: rgb(158, 8, 8);
     font-size: 20px;
   }
+

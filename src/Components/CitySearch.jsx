@@ -7,7 +7,19 @@ function CitySearch(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
+        document.getElementById("fieldCityName").value="";
+        document.getElementById("searchButton").disabled = true;
         props.searchCity(input);
+    }
+
+    const verifyText = e => {
+
+        if(e.target.value.trim() === "")
+            document.getElementById("searchButton").disabled = true;
+        else
+            document.getElementById("searchButton").disabled = false;
+
+        setInput({ name: e.target.value })
     }
 
     return (
@@ -16,9 +28,9 @@ function CitySearch(props) {
                 <button className="MagnifierIcon" type="submit">
                     <img src={magnifierIcon} alt="" />
                 </button>
-                <input type="text" placeholder="Search City"
-                    onInput={e => setInput({ name: e.target.value })} />
-                <button type="submit">Search</button>
+                <input type="text" placeholder="Search City" id="fieldCityName"
+                    onInput={verifyText} />
+                <button id="searchButton" type="submit" disabled="true">Search</button>
             </div>
         </form>
     )

@@ -4,6 +4,10 @@ import City from './CityWeather';
 import CitySearch from './CitySearch';
 import styles from './css/style.css';
 
+function isValid(str){
+  return !/[~`!#$%\^&*+=\-\[\]\\;,/{}|\\":<>\?0-9]/g.test(str);
+ }
+
 function Weather(){
   const isFirstRun = useRef(true);               // To avoid the first run. useEffect will run ONLY if the client 
                                                    // clicks the button
@@ -11,18 +15,10 @@ function Weather(){
   const [error, setError] = useState(null);
   const [cityToSearch, setCityToSearch] = useState("");
   const [validCity, setValidCity] = useState(true);
-  const [city, setCity] = useState({ 
-    city: "",
-    country: "",
-    weatherMain: "",
-    weatherDescription: "",
-    minTemp: "",
-    maxTemp: "",
-    position: ""
-   });
+  const [citiesList, setCitiesList] = useState([]);
 
-  const URL = `https://api.openweathermap.org/data/2.5/weather?q=${cityToSearch}&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}`;
-  
+  const URL = `http://api.openweathermap.org/data/2.5/weather?q=${cityToSearch}&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}`;
+
   let cityInfoToShow = "";        // Displays the city General Info
 
   useEffect(() => {
@@ -41,15 +37,17 @@ function Weather(){
           throw Error(`Error catching the API. Possibly unkown city name.`);
       })
       .then(apiData => {
-          setCity({
+          setCitiesList(citiesList => [...citiesList, {
             city: apiData.name,
             country: apiData.sys.country,
             weatherMain: apiData.weather[0].main,
             weatherDescription: apiData.weather[0].description,
             minTemp: apiData.main.temp_min,
             maxTemp: apiData.main.temp_max,
-            position: apiData.coord
-          });
+            position: apiData.coord,
+            id: apiData.id,
+            key: apiData.id
+          }])
       })
       .catch(err => {
         setError(err.message);
@@ -65,23 +63,20 @@ function Weather(){
       setValidCity(false);
   }
 
-  function isValid(str){
-    return !/[~`!#$%\^&*+=\-\[\]\\;,/{}|\\":<>\?0-9]/g.test(str);
-   }
-
-  const errorCityNameShow = (cityToCheck, valid) => {
+  const errorCityNameShow = (cityToCheck, valid, err) => {
     if(!valid)
       return <p className="WarningMsg">The city name is not valid. Please try again with different name.</p>;
     else if(cityToCheck.trim() === "")
-      return <p className="WarningMsg">You must write a city name.</p>;
-
+      return <p className="InitialMsg">Please type a city name.</p>;
+    else if(err !== null)                 // Checks for error in the fetch
+      return <p className="WarningMsg">{err}</p>; 
+    
     return "";
   }
 
-  const cityToShow = (err) => {
-    if(err !== null)                 // Checks for error in the fetch
-      return <p className="WarningMsg">{err}</p>; 
-    else if(city.city.trim() === "") // If there are no errors, checks if it is the first time, when no fetch has been done
+  const cityToShow = (city="") => {
+
+    if (city === "")
       return "";
     else
       return <City
@@ -92,19 +87,23 @@ function Weather(){
         minTemp={city.minTemp}
         maxTemp={city.maxTemp}
         position={city.position}
-    />;
+        id={city.id}
+        key={city.id}
+        eliminateCity={eliminateCity}
+      />;
   }  
 
-  const validationErrorMessage = errorCityNameShow(cityToSearch, validCity);
-  
-  if (validationErrorMessage === "")         // Only shows the info of the city if it has passed the validation process
-    cityInfoToShow = cityToShow(error);
+  const eliminateCity = keyValue => {
+    setCitiesList(citiesList.filter(el => el.key !== keyValue ));
+  }
+
+  const validationErrorMessage = errorCityNameShow(cityToSearch, validCity, error);
 
   return (
     <div className="ListContainer">
       <CitySearch searchCity={searchCity}/>
       { validationErrorMessage }
-      { cityInfoToShow }
+      { citiesList.map(el => cityToShow(el)) }
     </div>
   )
 }
