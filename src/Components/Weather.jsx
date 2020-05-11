@@ -17,7 +17,7 @@ function Weather(){
   const [validCity, setValidCity] = useState(true);
   const [citiesList, setCitiesList] = useState([]);
 
-  const URL = `http://api.openweathermap.org/data/2.5/weather?q=${cityToSearch}&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}`;
+  const URL = `https://api.openweathermap.org/data/2.5/weather?q=${cityToSearch}&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}`;
 
   let cityInfoToShow = "";        // Displays the city General Info
 
